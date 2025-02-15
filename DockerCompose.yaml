@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  server:
+    image: ghcr.io/xx025/nv-better:latest
+    container_name: nvb-server
+    environment:
+      - MODE=server
+    ports:
+      - "12999:12999"
+    restart: unless-stopped
+
+  client:
+    image: ghcr.io/xx025/nv-better:latest
+    container_name: nvb-client
+    hostname: node1
+    environment:
+      - MODE=client
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [ gpu ]
+    restart: unless-stopped
